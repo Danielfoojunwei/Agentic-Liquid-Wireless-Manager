@@ -1,0 +1,68 @@
+{
+  "description": "Training results from 1000-episode SAC-LTC run with ITU-R/3GPP physics",
+  "model": {
+    "architecture": "SAC-LTC (Soft Actor-Critic + Liquid Time-Constant + KAN)",
+    "total_parameters": 17274,
+    "components": {
+      "ltc_cell": "Liquid Time-Constant cell with adaptive tau",
+      "kan_actor": "2-layer Kolmogorov-Arnold Network (interpretable)",
+      "twin_critics": "Double Q-networks with LayerNorm",
+      "entropy_tuning": "Automatic alpha adjustment"
+    },
+    "input_features": 8,
+    "hidden_dim": 32,
+    "kan_hidden": 16,
+    "max_actions": 5
+  },
+  "training": {
+    "episodes": 1000,
+    "steps_per_episode": 100,
+    "total_timesteps": 100000,
+    "training_time_seconds": 1516,
+    "hardware": "CPU only",
+    "hyperparameters": {
+      "batch_size": 128,
+      "gamma": 0.99,
+      "tau_polyak": 0.005,
+      "learning_rate": 0.0003,
+      "replay_buffer_size": 50000,
+      "gradient_clip": 1.0,
+      "sequence_length": 8,
+      "switch_penalty": 0.3,
+      "target_entropy_ratio": 0.98
+    },
+    "physics_models_used": [
+      "ITU-R P.1238 indoor propagation",
+      "3GPP TR 38.901 UMa NLOS path loss",
+      "ITU-R P.838-3 rain attenuation",
+      "Shannon capacity theorem",
+      "Thermal noise (kTB)"
+    ]
+  },
+  "checkpoints": [
+    {"episode": 100, "avg_reward": -43.72, "best": -19.05, "alpha": 0.414},
+    {"episode": 200, "avg_reward": -42.38, "best": -19.05, "alpha": 0.332},
+    {"episode": 300, "avg_reward": -45.55, "best": -19.05, "alpha": 0.271},
+    {"episode": 400, "avg_reward": -45.68, "best": -19.05, "alpha": 0.226},
+    {"episode": 500, "avg_reward": -43.43, "best": -18.54, "alpha": 0.238},
+    {"episode": 600, "avg_reward": -43.57, "best": -18.54, "alpha": 0.232},
+    {"episode": 700, "avg_reward": -44.01, "best": -18.54, "alpha": 0.214},
+    {"episode": 800, "avg_reward": -45.72, "best": -15.49, "alpha": 0.199},
+    {"episode": 900, "avg_reward": -42.35, "best": -15.49, "alpha": 0.214},
+    {"episode": 1000, "avg_reward": -43.18, "best": -15.49, "alpha": 0.205}
+  ],
+  "evaluation": {
+    "n_episodes": 50,
+    "sac_ltc_mean_reward": -26.93,
+    "sac_ltc_std_reward": 28.43,
+    "sac_ltc_min_reward": -140.87,
+    "sac_ltc_max_reward": 14.91,
+    "random_baseline_mean": -42.43,
+    "improvement_over_random": "36.5%"
+  },
+  "files": {
+    "pytorch_checkpoint": "trained_model.pt",
+    "numpy_weights": "trained_weights.json",
+    "format_note": "trained_weights.json can be used without PyTorch (pure Python fallback)"
+  }
+}
